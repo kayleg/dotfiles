@@ -30,7 +30,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'samsonw/vim-task'
 Plug 'scrooloose/syntastic'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'ternjs/tern_for_vim'
+"Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-commentary'
@@ -43,7 +43,7 @@ Plug 'vim-scripts/dbext.vim'
 Plug 'vim-scripts/loremipsum'
 Plug 'vim-scripts/SyntaxRange'
 Plug 'wakatime/vim-wakatime'
-Plug 'wavded/vim-stylus.git'
+Plug 'wavded/vim-stylus'
 Plug 'apple/swift', { 'rtp': 'utils/vim' }
 Plug 'google/protobuf', { 'rtp': 'editors' }
 Plug 'wagnerf42/vim-clippy'
@@ -67,6 +67,11 @@ if has('nvim')
   Plug 'Shougo/neosnippet-snippets'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'zchee/deoplete-go', { 'do': 'make'}
+  Plug 'sebastianmarkow/deoplete-rust'
+  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+  Plug 'zchee/deoplete-clang'
+  let g:deoplete#sources#clang#libclang_path = "/usr/local/Cellar/llvm/5.0.1/lib/libclang.dylib"
+  let g:deoplete#sources#clang#clang_header = "/usr/local/Cellar/llvm/5.0.1/lib/clang"
 
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#disable_auto_complete = 1
@@ -271,8 +276,12 @@ if executable("ag")
 endif
 
 " Enable Ninja if available
-if executable("ninja") && filereadable("./build.ninja")
-  command! Ninja execute "!ninja"
+if executable("ninja")
+  if filereadable("./build.ninja")
+    command! Ninja execute "!ninja"
+  elseif filereadable("./build/build.ninja")
+    command! Ninja execute "!ninja -C build"
+  endif
   set makeprg=ninja
 endif
 
@@ -320,7 +329,7 @@ nmap <Leader>cts :s#\(\<\u\l\+\\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
 vmap <Leader>cts :s#\%V\(\<\u\l\+\\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
 
 " Ctrl-P Hide build/dist folders
-let g:ctrlp_custom_ignore = '\v(build|dist|tmp|bower_components|node_modules|cordova|build_cache|Godeps)$'
+let g:ctrlp_custom_ignore = '\v(build|dist|tmp|bower_components|node_modules|cordova|build_cache|Godeps|vendor)$'
 
 " Setup Vim Test
 let test#strategy = "asyncrun"
@@ -380,11 +389,15 @@ endfunction
 au BufRead,BufNewFile * call CustomizeSyntax()
 
 " Rust Lang
+let g:rustfmt_command = "cargo fmt -- "
+let g:rustfmt_autosave = 1 " Enable auto format on save
+let g:syntastic_rust_checkers = ['clippy', 'rustc']
+let g:ycm_rust_src_path = $RUST_SRC_PATH
+let g:deoplete#sources#rust#rust_source_path=$RUST_SRC_PATH
+let g:deoplete#sources#rust#racer_binary='/Users/kayle/.cargo/bin/racer'
+let g:rust_fold=1
+
 function! SetRustOptions()
-  let g:rustfmt_autosave = 1 " Enable auto format on save
-  let g:syntastic_rust_checkers = ['clippy']
-  let g:ycm_rust_src_path = $RUST_SRC_PATH
-  let g:rust_fold=1
   set textwidth=99
   set colorcolumn=99
   set tabstop=4

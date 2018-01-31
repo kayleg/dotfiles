@@ -51,3 +51,7 @@ alias clock='while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput 
 # Keyboard
 alias disable_keyboard='sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/'
 alias enable_keyboard='sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/'
+
+if which nvim &> /dev/null; then
+  alias vim=nvim
+fi

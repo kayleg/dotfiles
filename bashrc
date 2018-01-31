@@ -18,3 +18,5 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/bash_autocomplete
+
+export PATH="$HOME/.yarn/bin:$PATH"

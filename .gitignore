@@ -1,5 +1,6 @@
 vim/.netrwhist
 vim/.VimballRecord
 vim/bundle/*
+vim/plugged/*
 !vim/bundle/Vundle.vim
 .DS_Store
