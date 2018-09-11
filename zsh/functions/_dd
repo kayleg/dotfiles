@@ -1,0 +1,2 @@
+#compdef dd
+_files -W ~/code/clients/DD/ -/
