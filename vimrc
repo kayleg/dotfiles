@@ -11,7 +11,7 @@ Plug 'Raimondi/delimitMate' "auto close quotes, paren, etc
 Plug 'airblade/vim-gitgutter'
 Plug 'blindFS/vim-taskwarrior'
 Plug 'bling/vim-airline'
-Plug 'evanmiller/nginx-vim-syntax'
+Plug 'chr4/nginx.vim'
 Plug 'fatih/vim-go'
 Plug 'flazz/vim-colorschemes'
 Plug 'godlygeek/tabular'
@@ -28,7 +28,7 @@ Plug 'rizzatti/dash.vim'
 Plug 'rking/ag.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'samsonw/vim-task'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'skywind3000/asyncrun.vim'
 "Plug 'ternjs/tern_for_vim'
 Plug 'tpope/vim-abolish'
@@ -47,6 +47,8 @@ Plug 'wavded/vim-stylus'
 Plug 'apple/swift', { 'rtp': 'utils/vim' }
 Plug 'google/protobuf', { 'rtp': 'editors' }
 Plug 'wagnerf42/vim-clippy'
+Plug 'w0rp/ale'
+Plug 'udalov/kotlin-vim'
 
 
 if !has('nvim')
@@ -63,6 +65,11 @@ if !has('nvim')
 endif
 
 if has('nvim')
+  Plug 'autozimu/LanguageClient-neovim', {
+  \ 'branch': 'next',
+  \ 'do': 'bash install.sh',
+  \ }
+  Plug 'junegunn/fzf'
   Plug 'Shougo/neosnippet'
   Plug 'Shougo/neosnippet-snippets'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -70,11 +77,12 @@ if has('nvim')
   Plug 'sebastianmarkow/deoplete-rust'
   Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
   Plug 'zchee/deoplete-clang'
-  let g:deoplete#sources#clang#libclang_path = "/usr/local/Cellar/llvm/5.0.1/lib/libclang.dylib"
-  let g:deoplete#sources#clang#clang_header = "/usr/local/Cellar/llvm/5.0.1/lib/clang"
+  let g:deoplete#sources#clang#libclang_path = "/usr/local/Cellar/llvm/6.0.1/lib/libclang.dylib"
+  let g:deoplete#sources#clang#clang_header = "/usr/local/Cellar/llvm/6.0.1/lib/clang"
 
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#disable_auto_complete = 1
+  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
   autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
   " <CR>: If popup menu visible, expand snippet or close popup with selection,
   "       Otherwise, check if within empty pair and use delimitMate.
@@ -103,6 +111,11 @@ if has('nvim')
     let col = col('.') - 1
     return ! col || getline('.')[col - 1] =~? '\s'
   endfunction "}}}
+
+  let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls']
+    \}
+  nmap <leader>f :call LanguageClient_contextMenu()<CR>
 endif
 call plug#end()
 
@@ -113,6 +126,7 @@ set backspace=indent,eol,start
 
 set nobackup
 set nowritebackup
+set noshowmode
 set history=50 " keep 50 lines of command line history
 set ruler      " show the cursor position all the time
 set showcmd    " display incomplete commands
@@ -355,13 +369,23 @@ augroup END
 " Use Go Imports
 let g:go_fmt_command = "goimports"
 " Turn on error checking with Go/Syntastic
-let g:syntastic_go_checkers = ['gofmt', 'golint', 'govet', 'errcheck']
+"let g:syntastic_go_checkers = ['gofmt', 'golint', 'govet', 'errcheck']
 "let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_list_type = "quickfix"
 
 " Collaborative Vim
 let CoVim_default_name = "kayle"
 let CoVim_default_port = "1337"
+
+" Lint
+let g:ale_linters = {
+\   'javascript': ['standard'],
+\   'go': ['gofmt', 'gometalinter'],
+\   'rust': ['cargo', 'rls'],
+\}
+let g:ale_fixers = {
+\   'javascript': ['standard'],
+\}
 
 " Project Specific VimRC
 set exrc
@@ -371,7 +395,7 @@ set secure
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 
-au BufRead,BufNewFile * syn match simpleIterator '\C[^a-zA-Z][ijk][^a-zA-Z]'
+au BufRead,BufNewFile * syn match simpleIterator '\C[^a-zA-Z0-9][ijk][^a-zA-Z0-9]'
 
 function! CustomizeSyntax()
   if has('nvim')
@@ -391,7 +415,7 @@ au BufRead,BufNewFile * call CustomizeSyntax()
 " Rust Lang
 let g:rustfmt_command = "cargo fmt -- "
 let g:rustfmt_autosave = 1 " Enable auto format on save
-let g:syntastic_rust_checkers = ['clippy', 'rustc']
+"let g:syntastic_rust_checkers = ['clippy', 'rustc']
 let g:ycm_rust_src_path = $RUST_SRC_PATH
 let g:deoplete#sources#rust#rust_source_path=$RUST_SRC_PATH
 let g:deoplete#sources#rust#racer_binary='/Users/kayle/.cargo/bin/racer'
@@ -412,3 +436,5 @@ if &term =~ 'tmux'
   " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
   set t_ut=
 endif
+
+com! FormatJSON %!python -m json.tool

@@ -14,4 +14,5 @@ if exists(':Tabularize')
   endfunction
 
   AddTabularPipeline! decl_assign /=/ TabularizeDeclAssign(a:lines)
+  AddTabularPattern 1=    /^[^=]*\zs=/l2r2
 endif
