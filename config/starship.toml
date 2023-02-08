@@ -1,0 +1,9 @@
+[gcloud]
+disabled = true
+
+[directory]
+truncate_to_repo = false
+
+[time]
+disabled = false
+format = '🕙 [$time]($style) '

@@ -1,0 +1,536 @@
+--------------------------------------------------------------------------------
+-- Setup Packer
+--------------------------------------------------------------------------------
+local fn = vim.fn
+vim.o.runtimepath = vim.fn.stdpath('data') .. '/site/pack/*/start/*,' .. vim.o.runtimepath
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local packer_bootstrap
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
+    install_path })
+end
+
+vim.cmd 'packadd packer.nvim'
+
+require('packer').init {
+  display = {
+    open_fn = function()
+      return require("packer.util").float { border = "single" }
+    end,
+    prompt_border = "single"
+  },
+  git = {
+    clone_timeout = 600 -- Timeout, in seconds, for git clones
+  },
+  auto_clean = true,
+  compile_on_sync = true,
+  auto_reload_compiled = true
+}
+
+--------------------------------------------------------------------------------
+-- Install Plugins
+--------------------------------------------------------------------------------
+require('packer').startup(function(use)
+  use { 'wbthomason/packer.nvim', event = "VimEnter" }
+  use 'svermeulen/vimpeccable'
+
+  use { 'nvim-treesitter/nvim-treesitter',
+    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  }
+
+  -- Probably not needed because of treesitter. Also causes issues with ftdetect
+  -- If going to use, make sure to add:
+  -- `vim.g.polyglot_disabled = { 'ftdetect' }`
+  -- to your `init.lua` file
+  -- use { 'sheerun/vim-polyglot' }
+
+  use { 'ellisonleao/gruvbox.nvim' }
+  use 'folke/tokyonight.nvim'
+
+  use {
+    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    -- or                            , branch = '0.1.x',
+    requires = { { 'nvim-lua/plenary.nvim' } },
+    config = function()
+      require('telescope').setup()
+    end
+  }
+
+  use {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
+    "jose-elias-alvarez/typescript.nvim" -- Better LSP config for typescript
+  }
+
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
+  use { 'ms-jpq/coq_nvim', branch = 'coq',
+    rune = "python3 -m coq deps"
+  }
+  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
+  use {
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        on_attach = require("lsp-format").on_attach,
+        sources = {
+          null_ls.builtins.code_actions.eslint_d,
+          null_ls.builtins.code_actions.refactoring,
+
+          null_ls.builtins.diagnostics.eslint_d,
+
+          null_ls.builtins.formatting.prettierd
+        }
+      })
+    end
+  }
+  use {
+    "ray-x/lsp_signature.nvim",
+    config = function()
+      require('lsp_signature').setup({
+        select_signature_key = "<C-n>"
+      })
+    end
+  }
+
+  use "lukas-reineke/lsp-format.nvim"
+  use { 'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
+
+  use { "lukas-reineke/indent-blankline.nvim", config = function()
+    require('indent_blankline').setup(
+      {
+        char = " ",
+        space_char_blankline = " ",
+        context_char = "│",
+        show_current_context = true,
+        show_current_context_start = true,
+      }
+    )
+  end }
+
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
+  }
+  use({
+    "kylechui/nvim-surround",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  })
+
+  use { 'mrshmllow/document-color.nvim', config = function()
+    require("document-color").setup {
+      -- Default options
+      mode = "background", -- "background" | "foreground" | "single"
+    }
+  end
+  }
+
+  use {
+    'tanvirtin/vgit.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+    config = function()
+      require('vgit').setup({
+        keymaps = {
+          ['n [c'] = 'hunk_up',
+          ['n ]c'] = 'hunk_down',
+          ['n <leader>gs'] = 'buffer_hunk_stage',
+          ['n <leader>gr'] = 'buffer_hunk_reset',
+          ['n <leader>gp'] = 'buffer_hunk_preview',
+          ['n <leader>gb'] = 'buffer_blame_preview',
+          ['n <leader>gf'] = 'buffer_diff_preview',
+          ['n <leader>gh'] = 'buffer_history_preview',
+          ['n <leader>gu'] = 'buffer_reset',
+          ['n <leader>gg'] = 'buffer_gutter_blame_preview',
+          ['n <leader>glu'] = 'project_hunks_preview',
+          ['n <leader>gls'] = 'project_hunks_staged_preview',
+          ['n <leader>gd'] = 'project_diff_preview',
+          ['n <leader>gq'] = 'project_hunks_qf',
+          ['n <leader>gx'] = 'toggle_diff_preference',
+        },
+      })
+    end
+  }
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+
+  use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim', config = function()
+    require("neogit").setup()
+  end
+  }
+
+  use {
+    'goolord/alpha-nvim',
+    config = function()
+      require 'alpha'.setup(require 'alpha.themes.startify'.config)
+    end
+  }
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {
+      'kyazdani42/nvim-web-devicons', -- optional, for file icons
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+  }
+
+  use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons',
+    config = function()
+      require("bufferline").setup {
+        options = {
+          numbers = "ordinal",
+          diagnostics = "nvim_lsp"
+        }
+      }
+    end
+  }
+
+  use {
+    "windwp/nvim-autopairs",
+    config = function() require("nvim-autopairs").setup {} end
+  }
+
+  use 'wakatime/vim-wakatime'
+  use {
+    "sitiom/nvim-numbertoggle",
+  }
+  use {
+    'jghauser/mkdir.nvim'
+  }
+  use { 'cappyzawa/trim.nvim',
+    config = function()
+      require('trim').setup()
+    end
+  }
+  use { 'ethanholz/nvim-lastplace',
+    config = function()
+      require('nvim-lastplace').setup()
+    end
+  }
+
+  -- use 'windwp/nvim-ts-autotag'
+  use {
+    "folke/todo-comments.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("todo-comments").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
+  use {
+    "nvim-neorg/neorg",
+    run = ":Neorg sync-parsers",
+    config = function()
+      require('neorg').setup {
+        load = {
+          ["core.defaults"] = {},
+          ["core.norg.dirman"] = {
+            config = {
+              workspaces = {
+                neon = "~/code/neon/notes",
+                home = "~/notes/home",
+                gtd = "~/notes/gtd",
+              },
+              autochdir = false,
+              default_workspace = "neon",
+            }
+          },
+          ["core.norg.concealer"] = {},
+          ["core.norg.journal"] = {},
+          ["core.norg.qol.toc"] = {},
+          ["core.presenter"] = {
+            config = {
+              zen_mode = "zen-mode",
+            },
+          },
+          ["core.integrations.telescope"] = {},
+          ["core.export"] = {
+            config = {}
+          },
+          ["core.export.markdown"] = {
+            config = {}
+          },
+        }
+      }
+    end,
+    requires = { "nvim-lua/plenary.nvim",
+      "nvim-neorg/neorg-telescope",
+    }
+  }
+
+  -- install without yarn or npm
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+    setup = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" }
+  })
+
+  -- use({ "iamcco/markdown-preview.nvim",
+  --   run = "cd app && npm install",
+  --   setup = function()
+  --     vim.g.mkdp_filetypes = { "markdown" }
+  --   end,
+  --   ft = { "markdown" }, })
+
+  use {
+    'glacambre/firenvim',
+    run = function() vim.fn['firenvim#install'](0) end
+  }
+
+
+  --------------------------------------------------------------------------------
+  -- Setup Testing
+  --------------------------------------------------------------------------------
+  use {
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      'haydenmeade/neotest-jest',
+      "rouge8/neotest-rust"
+    }
+  }
+
+  use({
+    "andythigpen/nvim-coverage",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("coverage").setup()
+    end,
+  })
+
+  use "rgroli/other.nvim"
+
+
+  --------------------------------------------------------------------------------
+  -- Running commands
+  --------------------------------------------------------------------------------
+  use {
+    'stevearc/overseer.nvim',
+    requires = 'stevearc/dressing.nvim',
+    config = function() require('overseer').setup() end
+  }
+
+  use 'lervag/vimtex'
+
+  use {
+    "ThePrimeagen/refactoring.nvim",
+    requires = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-treesitter/nvim-treesitter" }
+    },
+    config = function()
+      require('refactoring').setup({})
+    end
+  }
+
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
+
+require("other-nvim").setup({
+  mappings = {
+    {
+      pattern = "(.*)/(.*).test.ts$",
+      target = "%1/%2.ts",
+      context = "component"
+    },
+    {
+      pattern = "(.*)/(.*).ts$",
+      target = "%1/\\(%2.test.ts\\|%2.spec.ts\\)",
+      context = "test"
+    }
+  }
+})
+
+require('neotest').setup({
+  adapters = {
+    require("neotest-rust"),
+    require('neotest-jest')({
+      jestCommand = "yarn test --coverage=true",
+      jestConfigFile = "jest.config.ts",
+      env = { CI = true },
+      cwd = function(path)
+        return vim.fn.getcwd()
+      end,
+    }),
+  },
+  consumers = {
+    overseer = require("neotest.consumers.overseer"),
+  },
+})
+
+require "nvim-tree".setup {
+  hijack_netrw = true,
+  view = {
+    side = "right",
+  }
+}
+require("mason").setup {
+  automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+  ui = {
+    icons = {
+      server_installed = "✓",
+      server_pending = "➜",
+      server_uninstalled = "✗"
+    }
+  }
+}
+require("mason-lspconfig").setup {
+  ensure_installed = { "sumneko_lua" },
+}
+
+
+require 'nvim-treesitter.configs'.setup {
+  ensure_installed = { 'rust', 'typescript', 'html', 'javascript', 'css', 'norg', 'prisma', 'graphql' },
+  auto_install = true,
+  highlight = {
+    enable = true,
+  },
+  autotag = {
+    enable = true,
+    filetypes = {
+      'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'tsx', 'jsx', 'rescript',
+      'xml',
+      'php',
+      'markdown',
+      'glimmer', 'handlebars', 'hbs', 'liquid',
+      'graphql'
+    }
+  }
+}
+
+local lspconfig = require('lspconfig')
+require("lsp-format").setup {
+  typescript = {
+    exclude = { "tsserver" },
+    tab_width = function()
+      return vim.opt.shiftwidth:get()
+    end,
+  },
+  yaml = { tab_width = 2 },
+  markdown = {
+    exclude = { "remark_ls" },
+  }
+}
+
+local on_attach = function(client, bufnr)
+  require "lsp-format".on_attach(client)
+
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', '<space>f', vim.lsp.buf.format, bufopts)
+
+  if client.server_capabilities.colorProvider then
+    -- Attach document colour support
+    require("document-color").buf_attach(bufnr)
+  end
+
+end
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+-- You are now capable!
+capabilities.textDocument.colorProvider = {
+  dynamicRegistration = true
+}
+
+local vim = vim
+vim.g.coq_settings = { auto_start = 'shut-up' }
+local coq = require('coq')
+local servers = { 'html', 'jsonls', 'prismals', 'remark_ls', 'gopls', 'tailwindcss', 'rust_analyzer',
+  'sumneko_lua', 'theme_check', 'graphql' }
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup(coq.lsp_ensure_capabilities({
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }))
+end
+
+-- lspconfig['efm'].setup {
+--   on_attach = require("lsp-format").on_attach,
+--   init_options = { documentFormatting = true },
+--   settings = {
+--     languages = {
+--       javascript = { prettier },
+--       typescript = { prettier },
+--       typescriptreact = { prettier },
+--       yaml = { prettier },
+--       markdown = { prettier },
+--     },
+--   },
+-- }
+-- Use better typescript config
+require("typescript").setup({
+  disable_commands = false, -- prevent the plugin from creating Vim commands
+  debug = false, -- enable debug logging for commands
+  server = coq.lsp_ensure_capabilities({
+    on_attach = on_attach
+  }),
+})
+
+require('lualine').setup({
+  sections = {
+    lualine_x = { "overseer" },
+  },
+})
+
+-- load refactoring Telescope extension
+require("telescope").load_extension("refactoring")
+
+-- remap to open the Telescope refactoring menu in visual mode
+vim.api.nvim_set_keymap(
+  "v",
+  "<leader>rr",
+  "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+  { noremap = true }
+)

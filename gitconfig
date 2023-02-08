@@ -1,0 +1,39 @@
+[user]
+	name = REPLACE_NAME
+	email = REPLACE_EMAIL
+  signingkey = DDBA0A891001385D
+[alias]
+	co = checkout
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	undo = reset --soft HEAD~
+	trim = !git branch --merged | grep \"^[^*]\" | xargs git branch -d
+	permission-reset = !git diff -p -R --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
+  chlg = !sh -c 'git log $1...$2  --pretty=format:\"* %s [view commit](https://github.com/$3/$4/commit/%H) \"' -
+  tl = !git tag -l --sort=-v:refname | head -n 1
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[core]
+	excludesfile = REPLACE_HOME_DIR/.gitignore
+	editor = nvim
+	autocrlf = input
+  pager = less -r
+[apply]
+	whitespace = nowarn
+[format]
+	pretty = %C(yellow)%h%Creset %s %C(red)(%an, %cr)%Creset
+[github]
+	user = kayleg
+[push]
+	default = simple
+[http]
+	postBuffer = 157286400
+[commit]
+  gpgsign = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main
+[credential]
+	helper = store
