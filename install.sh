@@ -48,6 +48,7 @@ ln -s config/starship.toml ~/.config/starship.toml
 ln -s zshrc ~/.zshrc
 ln -s gitconfig ~/.gitconfig
 ln -s gitignore ~/.gitignore
+ln -s warp ~/.warp
 
 sed -i '' "s/REPLACE_EMAIL/$GIT_EMAIL/g" gitconfig
 sed -i '' "s/REPLACE_NAME/$GIT_NAME/g" gitconfig

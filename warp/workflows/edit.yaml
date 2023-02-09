@@ -1,0 +1,9 @@
+name: Edit FTP File
+command: lftp ftp://{{user}}:{{password}}@{{host}}
+arguments:
+  - name: user
+    description: user name to login
+  - name: password
+    description: password
+  - name: host
+    description: Server address the file is located on
