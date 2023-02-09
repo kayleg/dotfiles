@@ -14,9 +14,14 @@ read GIT_EMAIL
 echo "Enter you git name"
 read GIT_NAME
 
+# Link ZSHRC
+ln -s zshrc ~/.zshrc
+
 # Install Brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-source ~/.zshrc
+echo '# Set PATH, MANPATH, etc., for Homebrew.' >> ~/.zshprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -45,7 +50,6 @@ mkdir -p ~/.config
 
 ln -s config/nvim ~/.config/nvim
 ln -s config/starship.toml ~/.config/starship.toml
-ln -s zshrc ~/.zshrc
 ln -s gitconfig ~/.gitconfig
 ln -s gitignore ~/.gitignore
 ln -s warp ~/.warp
