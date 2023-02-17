@@ -408,7 +408,7 @@ require("mason").setup {
   }
 }
 require("mason-lspconfig").setup {
-  ensure_installed = { "sumneko_lua" },
+  ensure_installed = { "lua_ls" },
 }
 
 
@@ -474,7 +474,6 @@ local on_attach = function(client, bufnr)
     -- Attach document colour support
     require("document-color").buf_attach(bufnr)
   end
-
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -487,14 +486,23 @@ capabilities.textDocument.colorProvider = {
 local vim = vim
 vim.g.coq_settings = { auto_start = 'shut-up' }
 local coq = require('coq')
-local servers = { 'html', 'jsonls', 'prismals', 'remark_ls', 'gopls', 'tailwindcss', 'rust_analyzer',
-  'sumneko_lua', 'theme_check', 'graphql' }
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup(coq.lsp_ensure_capabilities({
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }))
-end
+
+require("mason-lspconfig").setup_handlers {
+  -- The first entry (without a key) will be the default handler
+  -- and will be called for each installed server that doesn't have
+  -- a dedicated handler.
+  function(server_name) -- default handler (optional)
+    lspconfig[server_name].setup(coq.lsp_ensure_capabilities({
+      on_attach = on_attach,
+      capabilities = capabilities,
+    }))
+  end,
+  -- Next, you can provide a dedicated handler for specific servers.
+  -- For example, a handler override for the `rust_analyzer`:
+  -- ["rust_analyzer"] = function()
+  --   require("rust-tools").setup {}
+  -- end
+}
 
 -- lspconfig['efm'].setup {
 --   on_attach = require("lsp-format").on_attach,
