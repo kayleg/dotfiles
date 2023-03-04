@@ -401,6 +401,9 @@ require('neotest').setup({
   consumers = {
     overseer = require("neotest.consumers.overseer"),
   },
+  quickfix = {
+    open = false
+  }
 })
 
 require "nvim-tree".setup {
