@@ -46,6 +46,12 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>ee', '<cmd>Trouble<cr>', opts)
 
+-- Glance
+vim.keymap.set('n', 'gD', '<CMD>Glance definitions<CR>', opts)
+vim.keymap.set('n', 'gR', '<CMD>Glance references<CR>', opts)
+vim.keymap.set('n', 'gY', '<CMD>Glance type_definitions<CR>', opts)
+vim.keymap.set('n', 'gM', '<CMD>Glance implementations<CR>', opts)
+
 -- Tests
 map('n', '<leader>tt', '<cmd>lua require("neotest").run.run()<cr>', { noremap = true })
 map('n', '<leader>tf', '<cmd>lua require("neotest").run.run(vim.fn.expand("%"))<cr>', { noremap = true })
@@ -63,6 +69,9 @@ map('n', '<leader>sw', '<cmd>Other<cr>', { noremap = true })
 -- Task Runner
 map('n', '<leader>r', '<cmd>OverseerRun<cr>', { noremap = true })
 map('n', '<leader>o', '<cmd>OverseerOpen<cr>', { noremap = true })
+
+-- Open symbol outline
+vim.keymap.set('n', '<leader>so', '<CMD>SymbolsOutline<CR>', opts)
 
 -- Make Editing Compiled Files Faster
 map('n', '<leader>xx', '<cmd>TSDisable highlight <bar> IndentBlanklineDisable <cr>', { noremap = true })
