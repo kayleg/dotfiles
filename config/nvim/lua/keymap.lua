@@ -80,6 +80,9 @@ vim.keymap.set('n', '<leader>so', '<CMD>SymbolsOutline<CR>', opts)
 -- Make Editing Compiled Files Faster
 map('n', '<leader>xx', '<cmd>TSDisable highlight <bar> IndentBlanklineDisable <cr>', { noremap = true })
 
+-- Notes:
+vim.keymap.set('n', '<leader>no', '<CMD>Neorg index<CR>', opts)
+
 -- remap to open the Telescope refactoring menu in visual mode
 vim.api.nvim_set_keymap(
   "v",
