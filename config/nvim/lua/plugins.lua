@@ -115,17 +115,18 @@ require('packer').startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
-  use { "lukas-reineke/indent-blankline.nvim", config = function()
-    require('indent_blankline').setup(
-      {
-        char = " ",
-        space_char_blankline = " ",
-        context_char = "│",
-        show_current_context = true,
-        show_current_context_start = true,
-      }
-    )
-  end }
+  -- Too slow on big files due to requiring treesitter to parse the entire file
+  -- use { "lukas-reineke/indent-blankline.nvim", config = function()
+  --   require('indent_blankline').setup(
+  --     {
+  --       char = " ",
+  --       space_char_blankline = " ",
+  --       context_char = "│",
+  --       show_current_context = true,
+  --       show_current_context_start = true,
+  --     }
+  --   )
+  -- end }
 
   use {
     'numToStr/Comment.nvim',
@@ -174,21 +175,21 @@ require('packer').startup(function(use)
     config = function()
       require('vgit').setup({
         keymaps = {
-          ['n [c'] = 'hunk_up',
-          ['n ]c'] = 'hunk_down',
-          ['n <leader>gs'] = 'buffer_hunk_stage',
-          ['n <leader>gr'] = 'buffer_hunk_reset',
-          ['n <leader>gp'] = 'buffer_hunk_preview',
-          ['n <leader>gb'] = 'buffer_blame_preview',
-          ['n <leader>gf'] = 'buffer_diff_preview',
-          ['n <leader>gh'] = 'buffer_history_preview',
-          ['n <leader>gu'] = 'buffer_reset',
-          ['n <leader>gg'] = 'buffer_gutter_blame_preview',
-          ['n <leader>glu'] = 'project_hunks_preview',
-          ['n <leader>gls'] = 'project_hunks_staged_preview',
-          ['n <leader>gd'] = 'project_diff_preview',
-          ['n <leader>gq'] = 'project_hunks_qf',
-          ['n <leader>gx'] = 'toggle_diff_preference',
+              ['n [c'] = 'hunk_up',
+              ['n ]c'] = 'hunk_down',
+              ['n <leader>gs'] = 'buffer_hunk_stage',
+              ['n <leader>gr'] = 'buffer_hunk_reset',
+              ['n <leader>gp'] = 'buffer_hunk_preview',
+              ['n <leader>gb'] = 'buffer_blame_preview',
+              ['n <leader>gf'] = 'buffer_diff_preview',
+              ['n <leader>gh'] = 'buffer_history_preview',
+              ['n <leader>gu'] = 'buffer_reset',
+              ['n <leader>gg'] = 'buffer_gutter_blame_preview',
+              ['n <leader>glu'] = 'project_hunks_preview',
+              ['n <leader>gls'] = 'project_hunks_staged_preview',
+              ['n <leader>gd'] = 'project_diff_preview',
+              ['n <leader>gq'] = 'project_hunks_qf',
+              ['n <leader>gx'] = 'toggle_diff_preference',
         },
       })
     end
@@ -211,7 +212,7 @@ require('packer').startup(function(use)
     requires = {
       'kyazdani42/nvim-web-devicons', -- optional, for file icons
     },
-    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+    tag = 'nightly'                   -- optional, updated every week. (see issue #1193)
   }
 
   use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons',
@@ -267,8 +268,8 @@ require('packer').startup(function(use)
     config = function()
       require('neorg').setup {
         load = {
-          ["core.defaults"] = {},
-          ["core.dirman"] = {
+              ["core.defaults"] = {},
+              ["core.dirman"] = {
             config = {
               workspaces = {
                 work = "~/notes/work",
@@ -277,19 +278,19 @@ require('packer').startup(function(use)
               default_workspace = "work",
             }
           },
-          ["core.concealer"] = {},
-          ["core.journal"] = {},
-          ["core.qol.toc"] = {},
-          ["core.presenter"] = {
+              ["core.concealer"] = {},
+              ["core.journal"] = {},
+              ["core.qol.toc"] = {},
+              ["core.presenter"] = {
             config = {
               zen_mode = "zen-mode",
             },
           },
-          ["core.integrations.telescope"] = {},
-          ["core.export"] = {
+              ["core.integrations.telescope"] = {},
+              ["core.export"] = {
             config = {}
           },
-          ["core.export.markdown"] = {
+              ["core.export.markdown"] = {
             config = {}
           },
         }
@@ -322,6 +323,14 @@ require('packer').startup(function(use)
     run = function() vim.fn['firenvim#install'](0) end
   }
 
+  --------------------------------------------------------------------------------
+  -- Buffers
+  --------------------------------------------------------------------------------
+  use { 'kazhala/close-buffers.nvim',
+    config = function()
+      require("close_buffers").setup()
+    end
+  }
 
   --------------------------------------------------------------------------------
   -- Setup Testing
@@ -380,6 +389,10 @@ require('packer').startup(function(use)
     config = function()
       require "octo".setup()
     end
+  }
+
+  use {
+    'stevearc/profile.nvim'
   }
 
 
@@ -451,6 +464,9 @@ require 'nvim-treesitter.configs'.setup {
   auto_install = true,
   highlight = {
     enable = true,
+    disable = function(lang, bufnr) -- Disable in large C++ buffers
+      return vim.api.nvim_buf_line_count(bufnr) > 5000
+    end,
   },
   autotag = {
     enable = true,
@@ -555,7 +571,7 @@ require("mason-lspconfig").setup_handlers {
 -- Use better typescript config
 require("typescript").setup({
   disable_commands = false, -- prevent the plugin from creating Vim commands
-  debug = false, -- enable debug logging for commands
+  debug = false,            -- enable debug logging for commands
   server = coq.lsp_ensure_capabilities({
     on_attach = on_attach
   }),

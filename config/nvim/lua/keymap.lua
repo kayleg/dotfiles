@@ -38,9 +38,9 @@ map('v', '<leader>y', '"+y', {})
 map('n', '<leader>yy', '"+yy', {})
 map('n', '<leader>p', '"+p', {})
 map('n', '<leader>P', '"+P', {})
-map('n', '<leader>cp', ':let @+=expand("%")<CR>', {}) -- relative path (src/foo.txt)
-map('n', '<leader>cP', ':let @+=expand("%:p")<CR>', {}) -- absolute path (/something/src/foo.txt)
-map('n', '<leader>cf', ':let @+=expand("%:t")<CR>', {}) -- filename (foo.txt)
+map('n', '<leader>cp', ':let @+=expand("%")<CR>', {})     -- relative path (src/foo.txt)
+map('n', '<leader>cP', ':let @+=expand("%:p")<CR>', {})   -- absolute path (/something/src/foo.txt)
+map('n', '<leader>cf', ':let @+=expand("%:t")<CR>', {})   -- filename (foo.txt)
 map('n', '<leader>cd', ':let @+=expand("%:p:h")<CR>', {}) -- directory name (/something/src)
 
 -- LSP
@@ -80,7 +80,7 @@ vim.keymap.set('n', '<leader>so', '<CMD>SymbolsOutline<CR>', opts)
 -- Make Editing Compiled Files Faster
 map('n', '<leader>xx', '<cmd>TSDisable highlight <bar> IndentBlanklineDisable <cr>', { noremap = true })
 
--- Notes:
+-- Neorg
 vim.keymap.set('n', '<leader>no', '<CMD>Neorg index<CR>', opts)
 
 -- remap to open the Telescope refactoring menu in visual mode
