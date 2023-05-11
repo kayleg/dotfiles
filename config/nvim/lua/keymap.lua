@@ -38,6 +38,10 @@ map('v', '<leader>y', '"+y', {})
 map('n', '<leader>yy', '"+yy', {})
 map('n', '<leader>p', '"+p', {})
 map('n', '<leader>P', '"+P', {})
+map('n', '<leader>cp', ':let @+=expand("%")<CR>', {}) -- relative path (src/foo.txt)
+map('n', '<leader>cP', ':let @+=expand("%:p")<CR>', {}) -- absolute path (/something/src/foo.txt)
+map('n', '<leader>cf', ':let @+=expand("%:t")<CR>', {}) -- filename (foo.txt)
+map('n', '<leader>cd', ':let @+=expand("%:p:h")<CR>', {}) -- directory name (/something/src)
 
 -- LSP
 local opts = { noremap = true, silent = true }
