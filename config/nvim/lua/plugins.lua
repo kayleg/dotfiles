@@ -105,7 +105,8 @@ require('packer').startup(function(use)
     config = function()
       require('lsp_signature').setup({
         select_signature_key = "<C-n>",
-        toggle_key = "<C-k>"
+        toggle_key = "<C-k>",
+        floating_window = false
       })
     end
   }
