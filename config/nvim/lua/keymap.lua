@@ -12,6 +12,7 @@ map('n', '<leader>fg', '<cmd>lua require("telescope.builtin").live_grep()<cr>', 
 map('n', '<leader>fb', '<cmd>lua require("telescope.builtin").buffers()<cr>', { noremap = true })
 map('n', '<leader>fh', '<cmd>lua require("telescope.builtin").help_tags()<cr>', { noremap = true })
 map('n', '<leader>fw', '<cmd>lua require("telescope.builtin").grep_string()<cr>', { noremap = true })
+map('n', '<leader>fr', '<cmd>lua require("telescope.builtin").resume()<cr>', { noremap = true })
 map('n', '<leader>sc', '<cmd>noh<cr>', {})
 
 -- Use vinegar style directory navigation
