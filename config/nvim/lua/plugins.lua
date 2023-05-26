@@ -535,7 +535,7 @@ capabilities.textDocument.colorProvider = {
 }
 
 local vim = vim
-vim.g.coq_settings = { auto_start = 'shut-up',['clients.lsp.weight_adjust'] = 1 }
+vim.g.coq_settings = { auto_start = 'shut-up', ['clients.lsp.weight_adjust'] = 1 }
 local coq = require('coq')
 
 require("mason-lspconfig").setup_handlers {
