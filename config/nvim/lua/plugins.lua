@@ -176,21 +176,21 @@ require('packer').startup(function(use)
     config = function()
       require('vgit').setup({
         keymaps = {
-              ['n [c'] = 'hunk_up',
-              ['n ]c'] = 'hunk_down',
-              ['n <leader>gs'] = 'buffer_hunk_stage',
-              ['n <leader>gr'] = 'buffer_hunk_reset',
-              ['n <leader>gp'] = 'buffer_hunk_preview',
-              ['n <leader>gb'] = 'buffer_blame_preview',
-              ['n <leader>gf'] = 'buffer_diff_preview',
-              ['n <leader>gh'] = 'buffer_history_preview',
-              ['n <leader>gu'] = 'buffer_reset',
-              ['n <leader>gg'] = 'buffer_gutter_blame_preview',
-              ['n <leader>glu'] = 'project_hunks_preview',
-              ['n <leader>gls'] = 'project_hunks_staged_preview',
-              ['n <leader>gd'] = 'project_diff_preview',
-              ['n <leader>gq'] = 'project_hunks_qf',
-              ['n <leader>gx'] = 'toggle_diff_preference',
+          ['n [c'] = 'hunk_up',
+          ['n ]c'] = 'hunk_down',
+          ['n <leader>gs'] = 'buffer_hunk_stage',
+          ['n <leader>gr'] = 'buffer_hunk_reset',
+          ['n <leader>gp'] = 'buffer_hunk_preview',
+          ['n <leader>gb'] = 'buffer_blame_preview',
+          ['n <leader>gf'] = 'buffer_diff_preview',
+          ['n <leader>gh'] = 'buffer_history_preview',
+          ['n <leader>gu'] = 'buffer_reset',
+          ['n <leader>gg'] = 'buffer_gutter_blame_preview',
+          ['n <leader>glu'] = 'project_hunks_preview',
+          ['n <leader>gls'] = 'project_hunks_staged_preview',
+          ['n <leader>gd'] = 'project_diff_preview',
+          ['n <leader>gq'] = 'project_hunks_qf',
+          ['n <leader>gx'] = 'toggle_diff_preference',
         },
       })
     end
@@ -268,8 +268,8 @@ require('packer').startup(function(use)
     config = function()
       require('neorg').setup {
         load = {
-              ["core.defaults"] = {},
-              ["core.dirman"] = {
+          ["core.defaults"] = {},
+          ["core.dirman"] = {
             config = {
               workspaces = {
                 work = "~/notes/work",
@@ -278,19 +278,19 @@ require('packer').startup(function(use)
               default_workspace = "work",
             }
           },
-              ["core.concealer"] = {},
-              ["core.journal"] = {},
-              ["core.qol.toc"] = {},
-              ["core.presenter"] = {
+          ["core.concealer"] = {},
+          ["core.journal"] = {},
+          ["core.qol.toc"] = {},
+          ["core.presenter"] = {
             config = {
               zen_mode = "zen-mode",
             },
           },
-              ["core.integrations.telescope"] = {},
-              ["core.export"] = {
+          ["core.integrations.telescope"] = {},
+          ["core.export"] = {
             config = {}
           },
-              ["core.export.markdown"] = {
+          ["core.export.markdown"] = {
             config = {}
           },
         }
