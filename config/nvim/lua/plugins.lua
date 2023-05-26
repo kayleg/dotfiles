@@ -395,6 +395,30 @@ require('packer').startup(function(use)
     'stevearc/profile.nvim'
   }
 
+  use {
+    'michaelb/sniprun',
+    requires = {
+      'rcarriga/nvim-notify'
+    },
+    run = 'sh ./install.sh',
+    config = function()
+      require 'sniprun'.setup({
+        selected_interpreters = { "JS_TS_deno" },
+        repl_enable = { "JS_TS_deno" },
+        interpreter_options = {
+          JS_TS_deno = {
+            use_on_filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
+          },
+        },
+        display = {
+          "VirtualText",
+          "Classic",
+          "NvimNotify",
+        },
+      })
+    end
+  }
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
