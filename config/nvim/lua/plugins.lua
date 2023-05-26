@@ -595,7 +595,7 @@ require("mason-lspconfig").setup_handlers {
 -- Use better typescript config
 require("typescript").setup({
   disable_commands = false, -- prevent the plugin from creating Vim commands
-  debug = false,            -- enable debug logging for commands
+  debug = false, -- enable debug logging for commands
   server = coq.lsp_ensure_capabilities({
     on_attach = on_attach
   }),
