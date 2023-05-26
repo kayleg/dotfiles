@@ -69,7 +69,7 @@ require('packer').startup(function(use)
 
   use {
     "folke/trouble.nvim",
-    requires = "kyazdani42/nvim-web-devicons",
+    requires = "nvim-tree/nvim-web-devicons",
     config = function()
       require("trouble").setup {
         -- your configuration comes here
@@ -113,7 +113,7 @@ require('packer').startup(function(use)
 
   use "lukas-reineke/lsp-format.nvim"
   use { 'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
 
   -- Too slow on big files due to requiring treesitter to parse the entire file
@@ -209,14 +209,13 @@ require('packer').startup(function(use)
     end
   }
   use {
-    'kyazdani42/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua',
     requires = {
-      'kyazdani42/nvim-web-devicons', -- optional, for file icons
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
     },
-    tag = 'nightly'                   -- optional, updated every week. (see issue #1193)
   }
 
-  use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons',
+  use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'nvim-tree/nvim-web-devicons',
     config = function()
       require("bufferline").setup {
         options = {
@@ -385,7 +384,7 @@ require('packer').startup(function(use)
     requires = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
     },
     config = function()
       require "octo".setup()
