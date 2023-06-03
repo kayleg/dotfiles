@@ -96,16 +96,16 @@ require('packer').startup(function(use)
       })
     end
   }
-  use {
-    "ray-x/lsp_signature.nvim",
-    config = function()
-      require('lsp_signature').setup({
-        select_signature_key = "<C-n>",
-        toggle_key = "<C-k>",
-        floating_window = false
-      })
-    end
-  }
+  -- use {
+  --   "ray-x/lsp_signature.nvim",
+  --   config = function()
+  --     require('lsp_signature').setup({
+  --       select_signature_key = "<C-n>",
+  --       toggle_key = "<C-k>",
+  --       floating_window = false
+  --     })
+  --   end
+  -- }
 
   use "lukas-reineke/lsp-format.nvim"
   use { 'nvim-lualine/lualine.nvim',
@@ -622,7 +622,7 @@ cmp.setup({
 })
 
 -- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
+cmp.setup.filetype({ 'gitcommit', 'NeogitCommitMessage' }, {
   sources = cmp.config.sources(
     { { name = 'git' } },
     { { name = 'conventionalcommits' } },
