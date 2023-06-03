@@ -79,10 +79,6 @@ require('packer').startup(function(use)
     end
   }
 
-  use { 'ms-jpq/coq_nvim', branch = 'coq',
-    run = "python3 -m coq deps"
-  }
-  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
   use {
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
@@ -419,6 +415,21 @@ require('packer').startup(function(use)
     end
   }
 
+  -- autocompletion
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      { 'davidsierradz/cmp-conventionalcommits' },
+      { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-cmdline' },
+      { 'hrsh7th/cmp-nvim-lsp' },
+      { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+      { 'hrsh7th/cmp-path' },
+      { 'petertriho/cmp-git' },
+      -- { 'hrsh7th/cmp-vsnip' },
+    }
+  }
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
@@ -551,7 +562,8 @@ local on_attach = function(client, bufnr)
   end
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- You are now capable!
 capabilities.textDocument.colorProvider = {
@@ -559,18 +571,90 @@ capabilities.textDocument.colorProvider = {
 }
 
 local vim = vim
-vim.g.coq_settings = { auto_start = 'shut-up', ['clients.lsp.weight_adjust'] = 1 }
-local coq = require('coq')
+local cmp = require 'cmp'
+
+cmp.setup({
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+    end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs( -4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        fallback()
+      end
+    end,
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' },
+    -- { name = 'vsnip' }, -- For vsnip users.
+    -- { name = 'luasnip' }, -- For luasnip users.
+    -- { name = 'ultisnips' }, -- For ultisnips users.
+    -- { name = 'snippy' }, -- For snippy users.
+  }, {
+    { name = 'buffer' },
+  },
+    { { name = 'path' } })
+})
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources(
+    { { name = 'git' } },
+    { { name = 'conventionalcommits' } },
+    { { name = 'buffer' } }
+  )
+})
+
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
 
 require("mason-lspconfig").setup_handlers {
   -- The first entry (without a key) will be the default handler
   -- and will be called for each installed server that doesn't have
   -- a dedicated handler.
   function(server_name) -- default handler (optional)
-    lspconfig[server_name].setup(coq.lsp_ensure_capabilities({
+    lspconfig[server_name].setup({
       on_attach = on_attach,
       capabilities = capabilities,
-    }))
+    })
   end,
   -- Next, you can provide a dedicated handler for specific servers.
   -- For example, a handler override for the `rust_analyzer`:
@@ -600,9 +684,9 @@ require("mason-lspconfig").setup_handlers {
 require("typescript").setup({
   disable_commands = false, -- prevent the plugin from creating Vim commands
   debug = false, -- enable debug logging for commands
-  server = coq.lsp_ensure_capabilities({
+  server = {
     on_attach = on_attach
-  }),
+  },
 })
 
 require('lualine').setup({
