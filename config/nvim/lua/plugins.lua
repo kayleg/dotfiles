@@ -206,6 +206,12 @@ require('packer').startup(function(use)
   }
 
   use {
+    'ruifm/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function() require('gitlinker').setup() end
+  }
+
+  use {
     'goolord/alpha-nvim',
     config = function()
       require 'alpha'.setup(require 'alpha.themes.startify'.config)
