@@ -79,10 +79,14 @@ require('packer').startup(function(use)
     end
   }
 
-  use {
-    "jose-elias-alvarez/null-ls.nvim",
+  use { 'jay-babu/mason-null-ls.nvim',
+    requires = "jose-elias-alvarez/null-ls.nvim",
     config = function()
       local null_ls = require("null-ls")
+      require("mason-null-ls").setup({
+        automatic_installation = true,
+        handlers = {},
+      })
       null_ls.setup({
         on_attach = require("lsp-format").on_attach,
         sources = {
@@ -91,11 +95,13 @@ require('packer').startup(function(use)
 
           null_ls.builtins.diagnostics.eslint_d,
 
-          null_ls.builtins.formatting.prettierd
+          null_ls.builtins.formatting.prettierd.with({
+            extra_filetypes = { "liquid" },
+          }),
         }
       })
-    end
-  }
+    end }
+
   -- use {
   --   "ray-x/lsp_signature.nvim",
   --   config = function()
@@ -588,7 +594,7 @@ cmp.setup({
     -- documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs( -4),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
@@ -609,15 +615,15 @@ cmp.setup({
     end
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'nvim_lsp_signature_help' },
-    -- { name = 'vsnip' }, -- For vsnip users.
-    -- { name = 'luasnip' }, -- For luasnip users.
-    -- { name = 'ultisnips' }, -- For ultisnips users.
-    -- { name = 'snippy' }, -- For snippy users.
-  }, {
-    { name = 'buffer' },
-  },
+      { name = 'nvim_lsp' },
+      { name = 'nvim_lsp_signature_help' },
+      -- { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    },
     { { name = 'path' } })
 })
 
@@ -660,6 +666,8 @@ require("mason-lspconfig").setup_handlers {
   -- For example, a handler override for the `rust_analyzer`:
   ["theme_check"] = function()
     lspconfig.theme_check.setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
       root_dir = function()
         return vim.loop.cwd()
       end,
@@ -683,7 +691,7 @@ require("mason-lspconfig").setup_handlers {
 -- Use better typescript config
 require("typescript").setup({
   disable_commands = false, -- prevent the plugin from creating Vim commands
-  debug = false, -- enable debug logging for commands
+  debug = false,            -- enable debug logging for commands
   server = {
     on_attach = on_attach
   },
