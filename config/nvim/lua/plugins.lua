@@ -68,6 +68,13 @@ require('packer').startup(function(use)
   }
 
   use {
+    'dmmulroy/tsc.nvim',
+    config = function()
+      require('tsc').setup()
+    end
+  }
+
+  use {
     "folke/trouble.nvim",
     requires = "nvim-tree/nvim-web-devicons",
     config = function()
