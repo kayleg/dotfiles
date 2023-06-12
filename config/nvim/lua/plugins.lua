@@ -68,6 +68,13 @@ require('packer').startup(function(use)
   }
 
   use {
+    'dmmulroy/tsc.nvim',
+    config = function()
+      require('tsc').setup()
+    end
+  }
+
+  use {
     "folke/trouble.nvim",
     requires = "nvim-tree/nvim-web-devicons",
     config = function()
@@ -202,6 +209,12 @@ require('packer').startup(function(use)
   use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim', config = function()
     require("neogit").setup()
   end
+  }
+
+  use {
+    'ruifm/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function() require('gitlinker').setup() end
   }
 
   use {
@@ -395,6 +408,17 @@ require('packer').startup(function(use)
 
   use {
     'stevearc/profile.nvim'
+  }
+
+  use {
+    'rcarriga/nvim-notify',
+    config = function()
+      local notify = require('notify');
+      notify.setup()
+      vim.notify = function(message, level, opts)
+        return notify(message, level, opts) -- <-- Important to return the value from `nvim-notify`
+      end
+    end
   }
 
   use {
