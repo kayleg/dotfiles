@@ -519,8 +519,8 @@ require("other-nvim").setup({
 			context = "component",
 		},
 		{
-			pattern = "(.*)/(.*).ts$",
-			target = "%1/\\(%2.test.ts\\|%2.spec.ts\\)",
+			pattern = "(.*)/.*.ts$",
+			target = "%1/\\(*.test.ts\\|*.spec.ts\\)",
 			context = "test",
 		},
 	},
