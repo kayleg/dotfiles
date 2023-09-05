@@ -66,7 +66,19 @@ require("packer").startup(function(use)
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
-		"jose-elias-alvarez/typescript.nvim", -- Better LSP config for typescript
+	})
+
+	use({
+		"pmizio/typescript-tools.nvim",
+		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		config = function()
+			require("typescript-tools").setup({
+        settings = {
+          publish_diagnostic_on = 'change',
+          expose_as_code_action = { "fix_all","add_missing_imports","remove_unused"}
+        }
+      })
+		end,
 	})
 
 	use({
@@ -733,15 +745,6 @@ require("mason-lspconfig").setup_handlers({
 			end,
 		})
 	end,
-})
-
--- Use better typescript config
-require("typescript").setup({
-	disable_commands = false, -- prevent the plugin from creating Vim commands
-	debug = false, -- enable debug logging for commands
-	server = {
-		on_attach = on_attach,
-	},
 })
 
 require("lualine").setup({
