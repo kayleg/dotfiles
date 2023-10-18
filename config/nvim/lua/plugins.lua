@@ -117,10 +117,12 @@ require("packer").startup(function(use)
           java = formatters.lsp,
           javascript = formatters.prettierd,
           json = formatters.lsp,
+          liquid = formatters.prettierd,
           lua = formatters.lsp,
           markdown = formatters.prettierd,
           openscad = formatters.lsp,
           python = formatters.black,
+          ruby = formatters.lsp,
           rust = formatters.lsp,
           scad = formatters.lsp,
           scss = formatters.lsp,
@@ -129,7 +131,6 @@ require("packer").startup(function(use)
           typescript = formatters.prettierd,
           typescriptreact = formatters.prettierd,
           yaml = formatters.lsp,
-          liquid = formatters.prettierd,
           eruby = {
             formatters.if_file_exists({
               pattern = ".prettierrc",
@@ -796,6 +797,37 @@ require("mason-lspconfig").setup_handlers({
       end,
     })
   end,
+
+  ['cssls'] = function()
+    local custom_capabilities = require("cmp_nvim_lsp").default_capabilities()
+    custom_capabilities.textDocument.completion.completionItem.snippetSupport = true
+    lspconfig.cssls.setup({
+      on_attach = on_attach,
+      capabilities = custom_capabilities,
+      settings = {
+        css = {
+          validate = true,
+          lint = {
+            unknownAtRules = 'ignore'
+          },
+        },
+        less = {
+          validate = true,
+          lint = {
+            unknownAtRules = 'ignore'
+          },
+        },
+        scss = {
+          validate = true,
+          lint = {
+            unknownAtRules = 'ignore'
+          },
+        }
+      }
+    })
+  end
+
+
 
   -- ["ruby_ls"] = function()
   -- 	lspconfig.ruby_ls.setup({
