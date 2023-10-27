@@ -559,6 +559,20 @@ require("packer").startup(function(use)
     },
   })
 
+  -- navigation
+  use({
+    "folke/flash.nvim",
+    config = function()
+      require("flash").setup()
+    end
+  })
+
+  use({
+    "yorickpeterse/nvim-window",
+    config = function()
+      require("nvim-window").setup({})
+    end
+  })
   use("https://git.sr.ht/~soywod/himalaya-vim")
 
   -- Automatically set up your configuration after cloning packer.nvim

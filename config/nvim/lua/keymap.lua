@@ -84,6 +84,9 @@ map('n', '<leader>xx', '<cmd>TSDisable highlight <bar> IndentBlanklineDisable <c
 -- Neorg
 vim.keymap.set('n', '<leader>no', '<CMD>Neorg index<CR>', opts)
 
+-- Navigation
+map('n', '<leader>w', '<CMD>:lua require("nvim-window").pick()<CR>', opts)
+
 -- remap to open the Telescope refactoring menu in visual mode
 vim.api.nvim_set_keymap(
   "v",
