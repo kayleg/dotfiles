@@ -573,6 +573,17 @@ require("packer").startup(function(use)
       require("nvim-window").setup({})
     end
   })
+
+  use({
+    "shortcuts/no-neck-pain.nvim",
+    tag = "*",
+    config = function()
+      require("no-neck-pain").setup({
+        width = 130
+      })
+    end
+  })
+
   use("https://git.sr.ht/~soywod/himalaya-vim")
 
   -- Automatically set up your configuration after cloning packer.nvim
