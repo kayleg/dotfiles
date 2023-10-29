@@ -1,5 +1,5 @@
-require('plugins')
 require('keymap')
+require('plugins')
 
 local vim = vim
 local opt = vim.opt
