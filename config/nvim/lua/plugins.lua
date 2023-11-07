@@ -759,7 +759,13 @@ require("lazy").setup({
   -- navigation
   {
     "folke/flash.nvim",
-    config = true
+    opts = {
+      modes = {
+        char = {
+          jump_labels = true
+        }
+      }
+    }
   },
 
   {
