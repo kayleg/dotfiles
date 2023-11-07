@@ -443,6 +443,7 @@ require("lazy").setup({
         ["core.concealer"] = {},
         ["core.journal"] = {},
         ["core.qol.toc"] = {},
+        ["core.summary"] = { config = { strategy = "default" } },
         ["core.presenter"] = {
           config = {
             zen_mode = "zen-mode",
