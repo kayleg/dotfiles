@@ -372,6 +372,7 @@ require("lazy").setup({
   },
   {
     "nvim-tree/nvim-tree.lua",
+    enabled = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons", -- optional, for file icons
     },
@@ -788,6 +789,119 @@ require("lazy").setup({
     lazy = true,
     cmd = "Himalaya"
   },
+
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    opts = {
+      open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "edgy" },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      {
+        's1n7ax/nvim-window-picker',
+        version = '2.*',
+        opts = {
+          hint = 'floating-big-letter',
+          filter_rules = {
+            include_current_win = false,
+            autoselect_one = true,
+            -- filter using buffer options
+            bo = {
+              -- if the file type is one of following, the window will be ignored
+              filetype = { 'neo-tree', "neo-tree-popup", "notify" },
+              -- if the buffer type is one of following, the window will be ignored
+              buftype = { 'terminal', "quickfix" },
+            },
+          },
+        }
+      },
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    }
+  },
+
+  {
+    "folke/edgy.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.opt.laststatus = 3
+      vim.opt.splitkeep = "screen"
+    end,
+    opts = {
+      animate = {
+        enabled = false
+      },
+      close_when_all_hidden = false,
+      -- bottom = {
+      --   -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
+      --   {
+      --     ft = "toggleterm",
+      --     size = { height = 0.4 },
+      --     -- exclude floating windows
+      --     filter = function(buf, win)
+      --       return vim.api.nvim_win_get_config(win).relative == ""
+      --     end,
+      --   },
+      --   {
+      --     ft = "lazyterm",
+      --     title = "LazyTerm",
+      --     size = { height = 0.4 },
+      --     filter = function(buf)
+      --       return not vim.b[buf].lazyterm_cmd
+      --     end,
+      --   },
+      --   "Trouble",
+      --   { ft = "qf", title = "QuickFix" },
+      --   {
+      --     ft = "help",
+      --     size = { height = 20 },
+      --     -- only show help buffers
+      --     filter = function(buf)
+      --       return vim.bo[buf].buftype == "help"
+      --     end,
+      --   },
+      --   { ft = "spectre_panel", size = { height = 0.4 } },
+      -- },
+      right = {
+        -- Neo-tree filesystem always takes half the screen height
+        {
+          title = "Neo-Tree",
+          ft = "neo-tree",
+          filter = function(buf)
+            return vim.b[buf].neo_tree_source == "filesystem"
+          end,
+          size = { height = 0.5 },
+        },
+        {
+          title = "Neo-Tree Git",
+          ft = "neo-tree",
+          filter = function(buf)
+            return vim.b[buf].neo_tree_source == "git_status"
+          end,
+          pinned = true,
+          open = "Neotree position=right git_status",
+        },
+        {
+          title = "Neo-Tree Buffers",
+          ft = "neo-tree",
+          filter = function(buf)
+            return vim.b[buf].neo_tree_source == "buffers"
+          end,
+          pinned = true,
+          open = "Neotree position=top buffers",
+        },
+        {
+          ft = "Outline",
+          pinned = true,
+          open = "SymbolsOutlineOpen",
+        },
+        -- any other neo-tree windows
+        "neo-tree",
+      },
+    },
+  }
 })
 
 require("nvim-treesitter.configs").setup({

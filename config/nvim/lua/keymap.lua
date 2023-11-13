@@ -17,7 +17,8 @@ map('n', '<leader>sc', '<cmd>noh<cr>', {})
 
 -- Use vinegar style directory navigation
 -- map('n', '-', '<cmd>lua require("nvim-tree").open_replacing_current_buffer()<cr>', {})
-map('n', '<leader>fo', '<cmd>NvimTreeFindFileToggle<cr>', {})
+-- map('n', '<leader>fo', '<cmd>NvimTreeFindFileToggle<cr>', {})
+map('n', '<leader>fo', '<cmd>Neotree filesystem reveal<cr>', {})
 
 -- Set shortcuts for switching open buffers
 map('n', '<leader>1', '<cmd>BufferLineGoToBuffer 1<CR>', { silent = true })
