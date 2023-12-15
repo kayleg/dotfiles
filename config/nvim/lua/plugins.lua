@@ -31,7 +31,7 @@ require("lazy").setup({
     build = ':TSUpdate',
     config = function()
       local ts = require("nvim-treesitter.install")
-      ts.compilers = { "gcc-12" }
+      -- ts.compilers = { "gcc-12" }
     end,
   },
 
@@ -336,9 +336,9 @@ require("lazy").setup({
       keymaps = {
         ["n [c"] = "hunk_up",
         ["n ]c"] = "hunk_down",
-        ["n <leader>gs"] = "buffer_hunk_stage",
-        ["n <leader>gr"] = "buffer_hunk_reset",
-        ["n <leader>gp"] = "buffer_hunk_preview",
+        ["n <leader>ghs"] = "buffer_hunk_stage",
+        ["n <leader>ghr"] = "buffer_hunk_reset",
+        ["n <leader>ghp"] = "buffer_hunk_preview",
         ["n <leader>gb"] = "buffer_blame_preview",
         ["n <leader>gf"] = "buffer_diff_preview",
         ["n <leader>gh"] = "buffer_history_preview",
@@ -365,7 +365,8 @@ require("lazy").setup({
   {
     "ruifm/gitlinker.nvim",
     lazy = true,
-    keys = "<leader>gy",
+    keys = "<leader>gY",
+    config = true,
     dependencies = "nvim-lua/plenary.nvim",
   },
 
