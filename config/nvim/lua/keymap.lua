@@ -33,7 +33,7 @@ map('n', '<leader>9', '<cmd>BufferLineGoToBuffer 9<CR>', { silent = true })
 map('n', '<leader>$', '<cmd>BufferLineGoToBuffer -1<CR>', { silent = true })
 
 -- Git
-map('n', '<leader>g', '<cmd>Neogit<cr>', {})
+map('n', '<leader>gs', '<cmd>Neogit<cr>', {})
 
 -- Clipboard
 map('v', '<leader>y', '"+y', {})
