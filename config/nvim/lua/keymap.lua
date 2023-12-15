@@ -51,6 +51,12 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>ee', '<cmd>Trouble<cr>', opts)
+vim.keymap.set(
+  "n",
+  "<Leader>el",
+  '<cmd>lua require("lsp_lines").toggle()<CR>',
+  { desc = "Toggle lsp_lines" }
+)
 
 -- Glance
 vim.keymap.set('n', 'gD', '<CMD>Glance definitions<CR>', opts)

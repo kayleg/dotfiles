@@ -28,8 +28,14 @@ vim.cmd [[hi SpellBad gui=italic guifg=#990000]]
 vim.wo.number = true
 
 
+-- LSP
+vim.diagnostic.config({
+  virtual_text = false,
+  virtual_lines = { only_current_line = true }
+})
+
 --------------------------------------------------------------------------------
--- BACKUP
+
 --------------------------------------------------------------------------------
 
 opt.backup = true                               -- Enable backups

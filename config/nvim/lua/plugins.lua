@@ -206,6 +206,11 @@ require("lazy").setup({
   },
 
   {
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = true
+  },
+
+  {
     "folke/trouble.nvim",
     config = true,
     dependencies = "nvim-tree/nvim-web-devicons",
