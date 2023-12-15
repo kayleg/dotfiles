@@ -516,13 +516,17 @@ require("lazy").setup({
       "zidhuss/neotest-minitest",
     },
     config = function()
+      local jestCommand = 'yarn test';
+      if vim.fn.filereadable(vim.fn.getcwd() .. "package-lock.json") then
+        jestCommand = 'npm test'
+      end
       require('neotest').setup({
         adapters = {
           require("neotest-rust"),
           require("neotest-jest")({
-            jestCommand = "yarn test --coverage=true",
+            jestCommand = jestCommand,
             jestConfigFile = "jest.config.ts",
-            env = { CI = true },
+            env = { CI = false },
             cwd = function(path)
               return vim.fn.getcwd()
             end,
