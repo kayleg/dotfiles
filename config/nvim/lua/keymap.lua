@@ -55,7 +55,7 @@ vim.keymap.set('n', '<leader>ee', '<cmd>Trouble<cr>', opts)
 -- Glance
 vim.keymap.set('n', 'gD', '<CMD>Glance definitions<CR>', opts)
 vim.keymap.set('n', 'gR', '<CMD>Glance references<CR>', opts)
-vim.keymap.set('n', 'gY', '<CMD>Glance type_definitions<CR>', opts)
+vim.keymap.set('n', 'gT', '<CMD>Glance type_definitions<CR>', opts)
 vim.keymap.set('n', 'gM', '<CMD>Glance implementations<CR>', opts)
 
 -- Tests
