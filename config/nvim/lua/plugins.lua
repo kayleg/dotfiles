@@ -515,6 +515,7 @@ require("lazy").setup({
       "haydenmeade/neotest-jest",
       "rouge8/neotest-rust",
       "zidhuss/neotest-minitest",
+      "nvim-neotest/nvim-nio"
     },
     config = function()
       local jestCommand = 'yarn test';
