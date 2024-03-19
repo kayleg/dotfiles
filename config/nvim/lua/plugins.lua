@@ -365,7 +365,7 @@ require("lazy").setup({
   {
     "ruifm/gitlinker.nvim",
     lazy = true,
-    keys = "<leader>gY",
+    keys = "<leader>gy",
     config = true,
     dependencies = "nvim-lua/plenary.nvim",
   },
