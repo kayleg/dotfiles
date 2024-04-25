@@ -311,12 +311,17 @@ require("lazy").setup({
 
   -- Code outline
   {
-    "simrat39/symbols-outline.nvim",
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = {
+      { "<leader>so", "<cmd>Outline<CR>",      desc = "Toggle outline" },
+      { "<leader>fs", "<cmd>OutlineFocus<CR>", desc = "Toggle Focus between outline and code" },
+    },
     opts = {
-      autofold_depth = 1,
-    }
+      -- Your setup opts here
+    },
   },
-
   {
     "mrshmllow/document-color.nvim",
     opts = { mode = "background" }
@@ -433,8 +438,13 @@ require("lazy").setup({
   },
 
   {
+    "vhyrro/luarocks.nvim",
+    priority = 1000, -- We'd like this plugin to load first out of the rest
+    config = true,   -- This automatically runs `require("luarocks-nvim").setup()`
+  },
+
+  {
     "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
     opts = {
       load = {
         ["core.defaults"] = {},
@@ -465,7 +475,7 @@ require("lazy").setup({
         },
       },
     },
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope", "luarocks.nvim" },
   },
 
   -- install without yarn or npm
@@ -625,7 +635,9 @@ require("lazy").setup({
       "nvim-telescope/telescope.nvim",
       "nvim-tree/nvim-web-devicons",
     },
-    config = true
+    config = {
+      default_to_projects_v2 = true
+    }
   },
 
   -- Profiler when debugging startup

@@ -82,9 +82,6 @@ map('n', '<leader>sw', '<cmd>Other<cr>', { noremap = true })
 map('n', '<leader>r', '<cmd>OverseerRun<cr>', { noremap = true })
 map('n', '<leader>o', '<cmd>OverseerOpen<cr>', { noremap = true })
 
--- Open symbol outline
-vim.keymap.set('n', '<leader>so', '<CMD>SymbolsOutline<CR>', opts)
-
 -- Make Editing Compiled Files Faster
 map('n', '<leader>xx', '<cmd>TSDisable highlight <bar> IndentBlanklineDisable <cr>', { noremap = true })
 
