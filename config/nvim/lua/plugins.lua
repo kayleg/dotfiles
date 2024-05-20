@@ -397,7 +397,6 @@ require("lazy").setup({
 
   {
     "akinsho/bufferline.nvim",
-    version = "v2.*",
     dependencies = "nvim-tree/nvim-web-devicons",
     opts = {
       options = {
@@ -688,6 +687,8 @@ require("lazy").setup({
       },
     }
   },
+
+  { "mistricky/codesnap.nvim", build = "make" },
 
   {
     "tpope/vim-abolish"
