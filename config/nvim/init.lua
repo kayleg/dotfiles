@@ -17,9 +17,10 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.synmaxcol = 200
 
-vim.o.background = "dark" -- or "light" for light mode
+vim.o.background = "light" -- or "light" for light mode
 vim.g.tokyonight_style = "night"
 vim.cmd([[colorscheme tokyonight]])
+vim.o.background = "dark" -- or "light" for light mode
 
 -- Set spell check highlighting while Warp is still broken
 vim.cmd [[hi clear SpellBad ]]
