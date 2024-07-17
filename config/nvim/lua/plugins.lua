@@ -375,11 +375,21 @@ require("lazy").setup({
     dependencies = "nvim-lua/plenary.nvim",
   },
 
+  -- {
+  --   "goolord/alpha-nvim",
+  --   config = function()
+  --     require("alpha").setup(require("alpha.themes.startify").config)
+  --   end,
+  -- },
   {
-    "goolord/alpha-nvim",
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
     config = function()
-      require("alpha").setup(require("alpha.themes.startify").config)
+      require('dashboard').setup {
+        -- config
+      }
     end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } }
   },
   {
     "nvim-tree/nvim-tree.lua",
