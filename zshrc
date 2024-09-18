@@ -110,10 +110,10 @@ fi
 alias python=python3
 
 # ls
-alias ls="exa -F --icons --git"
-alias l="exa -lh --icons --git --no-user --no-permissions"
-alias ll="exa -l --icons --git --no-user --no-permissions"
-alias la='exa -aF --icons --git'
+alias ls="eza -F --icons --git"
+alias l="eza -lh --icons --git --no-user --no-permissions"
+alias ll="eza -l --icons --git --no-user --no-permissions"
+alias la='eza -aF --icons --git'
 
 # git
 alias gl='git pull'
