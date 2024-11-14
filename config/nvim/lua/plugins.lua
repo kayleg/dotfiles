@@ -202,7 +202,10 @@ require("lazy").setup({
   {
     "dmmulroy/tsc.nvim",
     lazy = true,
-    ft = { 'typescript', 'typescriptreact' }
+    ft = { 'typescript', 'typescriptreact' },
+    opts = {
+      use_trouble_qflist = true,
+    }
   },
 
   {
