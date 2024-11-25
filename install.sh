@@ -15,11 +15,11 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Install Brew items
-brew install aws-cdk awscli brotli exa glab go heroku httpie htop jq mysql-client neovim \
+brew install aws-cdk awscli brotli eza glab go heroku httpie htop jq mysql-client neovim \
   node prettierd protobuf protoc-gen-go-grpc pscale ripgrep starship thefuck tree-sitter \
-  wget yarn efm-langserver gh git lima
+  wget yarn efm-langserver gh git lima zellij zoxide mise
 
-brew install --cask google-cloud-sdk
+brew install --cask google-cloud-sdk hammerspoon
 
 # Install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -30,6 +30,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # Add font to font book
 open nerd_font.otf
 open nerd_font_italic.otf
+open nerd_font_bold.otf
+open nerd_font_bold_italic.otf
 
 # Generate new SSH Key
 ssh-keygen -t ed25519 -C $GIT_EMAIL
@@ -42,6 +44,9 @@ ln -s `pwd`/config/starship.toml $HOME/.config/starship.toml
 ln -s `pwd`/gitconfig $HOME/.gitconfig
 ln -s `pwd`/gitignore $HOME/.gitignore
 ln -s `pwd`/warp $HOME/.warp
+ln -s `pwd`/hammerspoon $HOME/.hammerspoon
+ln -s `pwd`/config/alacritty $HOME/.config/alacritty
+ln -s `pwd`/config/zellij $HOME/.config/zellij
 
 sed -i '' "s/REPLACE_EMAIL/$GIT_EMAIL/g" gitconfig
 sed -i '' "s/REPLACE_NAME/$GIT_NAME/g" gitconfig
@@ -49,4 +54,5 @@ sed -i '' "s/REPLACE_HOME_DIR/$HOME/g" gitconfig
 
 source ~/.zshrc
 
-echo "Everything is installed"
+echo "Auto installation is complete"
+echo "Make sure to download and install Alacritty from https://alacritty.org/"

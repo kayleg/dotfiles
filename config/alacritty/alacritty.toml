@@ -1,0 +1,39 @@
+[general]
+import = [
+    "~/.config/alacritty/themes/tokyo-night.toml"
+]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 10
+padding.y = 10
+decorations = "Buttonless"
+opacity = 0.90
+blur = true
+option_as_alt = "Both"
+
+[cursor]
+[cursor.style]
+shape="beam"
+
+[font]
+size = 13
+[font.normal]
+family="OperatorMono Nerd Font"
+style="Regular"
+[font.italic]
+family="OperatorMono Nerd Font"
+style="Italic"
+[font.bold]
+family="OperatorMono Nerd Font"
+style="Medium"
+[font.bold_italic]
+family="OperatorMono Nerd Font"
+style="Medium Italic"
+
+[terminal]
+
+[terminal.shell]
+program = "/opt/homebrew/bin/zellij"

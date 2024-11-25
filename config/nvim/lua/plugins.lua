@@ -22,7 +22,14 @@ require("lazy").setup({
   {
     "folke/tokyonight.nvim",
     lazy = false,
-    priority = 1000
+    priority = 1000,
+    opts = {
+      transparent = true,
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      },
+    }
   },
   { "svermeulen/vimpeccable" },
 
@@ -552,7 +559,15 @@ require("lazy").setup({
       { "stevearc/dressing.nvim",                    opts = {} },                            -- Optional: Improves `vim.ui.select`
       { 'echasnovski/mini.diff',                     version = '*' },
     },
-    config = true
+    config = {
+      adapters = {
+        anthropic = function()
+          return require("codecompanion.adapters").extend("copilot", {
+            model = "claude-3.5-sonnet"
+          })
+        end,
+      }
+    }
   },
   --------------------------------------------------------------------------------
   -- Buffers
@@ -860,7 +875,7 @@ require("lazy").setup({
   },
 
   {
-    "https://git.sr.ht/~soywod/himalaya-vim",
+    "https://github.com/pimalaya/himalaya-vim",
     lazy = true,
     cmd = "Himalaya"
   },
