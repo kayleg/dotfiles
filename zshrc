@@ -204,17 +204,6 @@ _dd() {
 }
 compdef _dd dd
 
-# neon Folder cd
-neon() {
-  cd ~/code/neon/$1
-}
-
-_neon() {
-  ((CURRENT == 2)) &&
-  _files -/ -W ~/code/neon
-}
-compdef _neon neon
-
 # Archiving
 squish() {
   XZ_OPT=-9 tar -Jcf "$1".tar.xz "$1"
@@ -229,9 +218,7 @@ wrip() {
   wget --mirror --convert-links --adjust-extension --page-requisites --no-parent --no-check-certificate "$1"
 }
 
+eval "$(/opt/homebrew/bin/mise activate zsh)"
 eval "$(glab completion -s zsh)"
 eval "$(starship init zsh)"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(zoxide init zsh)"
