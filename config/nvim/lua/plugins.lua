@@ -396,6 +396,7 @@ require("lazy").setup({
         },
         shortcut = {
           { desc = ' New File', group = '@property', action = 'enew', key = 'n' },
+          { desc = ' Git Diff', group = '@property', action = 'DiffviewOpen', key = 'd' },
           {
             icon = ' ',
             icon_hl = '@variable',
@@ -549,6 +550,7 @@ require("lazy").setup({
       "nvim-telescope/telescope.nvim",                                                       -- Optional: For using slash commands
       { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
       { "stevearc/dressing.nvim",                    opts = {} },                            -- Optional: Improves `vim.ui.select`
+      { 'echasnovski/mini.diff',                     version = '*' },
     },
     config = true
   },
