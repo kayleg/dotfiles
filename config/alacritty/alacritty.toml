@@ -13,6 +13,7 @@ decorations = "Buttonless"
 opacity = 0.90
 blur = true
 option_as_alt = "Both"
+startup_mode = "SimpleFullscreen"
 
 [cursor]
 [cursor.style]
