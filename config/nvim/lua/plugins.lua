@@ -559,12 +559,16 @@ require("lazy").setup({
     },
     config = {
       adapters = {
-        anthropic = function()
+        copilot = function()
           return require("codecompanion.adapters").extend("copilot", {
-            model = "claude-3.5-sonnet"
+            schema = {
+              model = {
+                default = "o3-mini-2025-01-31"
+              },
+            }
           })
         end,
-      }
+      },
     }
   },
   --------------------------------------------------------------------------------
