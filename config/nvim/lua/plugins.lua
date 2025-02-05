@@ -216,6 +216,21 @@ require("lazy").setup({
   },
 
   {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
+
+  {
     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = true
   },
@@ -257,6 +272,8 @@ require("lazy").setup({
           typescript = formatters.prettierd,
           typescriptreact = formatters.prettierd,
           yaml = formatters.lsp,
+          go = formatters.lsp,
+          gomod = formatters.lsp,
           eruby = {
             formatters.if_file_exists({
               pattern = ".prettierrc",
@@ -594,7 +611,7 @@ require("lazy").setup({
     config = function()
       local jestCommand = 'yarn test';
       if vim.fn.filereadable(vim.fn.getcwd() .. "package-lock.json") then
-        jestCommand = 'npm test'
+        jestCommand = 'npm test --'
       end
       require('neotest').setup({
         adapters = {
@@ -1000,7 +1017,7 @@ require("nvim-treesitter.configs").setup({
   highlight = {
     enable = true,
     disable = function(lang, bufnr) -- Disable in large C++ buffers
-      return vim.api.nvim_buf_line_count(bufnr) > 5000
+      return vim.api.nvim_buf_line_count(bufnr) > 5000 or vim.api.nvim_buf_get_name(bufnr) == 'generated.ts'
     end,
   },
   autotag = {
