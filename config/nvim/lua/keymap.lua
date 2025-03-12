@@ -7,12 +7,12 @@ vim.g.maplocalleader = ';'
 map('n', '<leader>q', '<cmd>b#|bd#<cr>', { noremap = true })
 
 -- Shortcuts for search
-map('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files()<cr>', { noremap = true })
-map('n', '<leader>fg', '<cmd>lua require("telescope.builtin").live_grep()<cr>', { noremap = true })
-map('n', '<leader>fb', '<cmd>lua require("telescope.builtin").buffers()<cr>', { noremap = true })
-map('n', '<leader>fh', '<cmd>lua require("telescope.builtin").help_tags()<cr>', { noremap = true })
-map('n', '<leader>fw', '<cmd>lua require("telescope.builtin").grep_string()<cr>', { noremap = true })
-map('n', '<leader>fr', '<cmd>lua require("telescope.builtin").resume()<cr>', { noremap = true })
+-- map('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files()<cr>', { noremap = true })
+-- map('n', '<leader>fg', '<cmd>lua require("telescope.builtin").live_grep()<cr>', { noremap = true })
+-- map('n', '<leader>fb', '<cmd>lua require("telescope.builtin").buffers()<cr>', { noremap = true })
+-- map('n', '<leader>fh', '<cmd>lua require("telescope.builtin").help_tags()<cr>', { noremap = true })
+-- map('n', '<leader>fw', '<cmd>lua require("telescope.builtin").grep_string()<cr>', { noremap = true })
+-- map('n', '<leader>fr', '<cmd>lua require("telescope.builtin").resume()<cr>', { noremap = true })
 map('n', '<leader>sc', '<cmd>noh<cr>', {})
 
 -- Use vinegar style directory navigation
@@ -93,10 +93,5 @@ vim.keymap.set('n', '<leader>no', '<CMD>Neorg index<CR>', opts)
 -- Navigation
 map('n', '<leader>w', '<CMD>:lua require("nvim-window").pick()<CR>', opts)
 
--- remap to open the Telescope refactoring menu in visual mode
-vim.api.nvim_set_keymap(
-  "v",
-  "<leader>rr",
-  "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-  { noremap = true }
-)
+-- Navigation
+map('n', '<leader>cc', '<CMD>CodeCompanionActions<CR>', opts)
