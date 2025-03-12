@@ -10,6 +10,9 @@
 	permission-reset = !git diff -p -R --no-color | grep -E \"^(diff|(old|new) mode)\" --color=never | git apply
   chlg = !sh -c 'git log $1...$2  --pretty=format:\"* %s [view commit](https://github.com/$3/$4/commit/%H) \"' -
   tl = !git tag -l --sort=-v:refname | head -n 1
+  rm-merged = !git branch --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" { print $1 }' | xargs -r git branch -D
+  sync = "!f(){ git switch \"${1:-develop}\"; git pull --prune; git rm-merged; }; f"
+  retrack = !git for-each-ref --format='%(refname:short) %(upstream)' refs/heads | xargs -r -I {} git branch -u origin/{} {}
 [color]
 	diff = auto
 	status = auto
@@ -27,6 +30,7 @@
 	user = kayleg
 [push]
 	default = simple
+	autoSetupRemote = true
 [http]
 	postBuffer = 157286400
 [commit]
