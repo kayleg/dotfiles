@@ -24,7 +24,7 @@ require("lazy").setup({
     lazy = false,
     priority = 1000,
     opts = {
-      transparent = true,
+      transparent = false,
       styles = {
         sidebars = "transparent",
         floats = "transparent",
@@ -105,13 +105,13 @@ require("lazy").setup({
       { "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
       { "<leader>sB",      function() Snacks.picker.grep_buffers() end,                            desc = "Grep Open Buffers" },
       { "<leader>sg",      function() Snacks.picker.grep() end,                                    desc = "Grep" },
-      { "<leader>sw",      function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+      { "<leader>fw",      function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
       -- search
       { '<leader>s"',      function() Snacks.picker.registers() end,                               desc = "Registers" },
       { '<leader>s/',      function() Snacks.picker.search_history() end,                          desc = "Search History" },
       { "<leader>sa",      function() Snacks.picker.autocmds() end,                                desc = "Autocmds" },
       { "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
-      { "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
+      -- { "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
       { "<leader>sC",      function() Snacks.picker.commands() end,                                desc = "Commands" },
       { "<leader>sd",      function() Snacks.picker.diagnostics() end,                             desc = "Diagnostics" },
       { "<leader>sD",      function() Snacks.picker.diagnostics_buffer() end,                      desc = "Buffer Diagnostics" },
@@ -199,10 +199,28 @@ require("lazy").setup({
         end,
       })
     end,
+  }, {
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
   },
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("which-key").show({ global = false })
+      end,
+      desc = "Buffer Local Keymaps (which-key)",
+    },
+  },
+},
 
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
+    version = "1.*.*",
     opts = {
       automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
       ui = {
@@ -215,7 +233,8 @@ require("lazy").setup({
     },
     dependencies = {
       {
-        "williamboman/mason-lspconfig.nvim",
+        "mason-org/mason-lspconfig.nvim",
+        version = "1.*.*",
         config = function()
           local lspconfig = require("lspconfig")
           local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -449,11 +468,14 @@ require("lazy").setup({
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {
-      sections = {
-        lualine_x = { "overseer" },
-      },
-    }
+    config = function()
+      require("lualine").setup({
+        sections = {
+          lualine_x = { "overseer" },
+          lualine_y = { "progress", { require('plugins.codecompanion.lualine') } },
+        },
+      })
+    end
   },
 
   -- Too slow on big files due to requiring treesitter to parse the entire file
@@ -711,13 +733,33 @@ require("lazy").setup({
     event = "InsertEnter",
     config = true
   },
+
+  {
+    "ravitemer/mcphub.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    build = "npm install -g mcp-hub@latest",
+    config = {
+      auto_approve = true,
+      extensions = {
+        codecompanion = {
+          -- Show the mcp tool result in the chat buffer
+          -- NOTE:if the result is markdown with headers, content after the headers wont be sent by codecompanion
+          show_result_in_chat = true,
+          make_vars = true,           -- make chat #variables from MCP server resources
+          make_slash_commands = true, -- make /slash_commands from MCP server prompts
+        },
+      }
+    }
+  },
   {
     "olimorris/codecompanion.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "hrsh7th/nvim-cmp",                                                                    -- Optional: For using slash commands and variables in the chat buffer
-      "j-hui/fidget.nvim",
+      -- "j-hui/fidget.nvim",
       { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
       { "stevearc/dressing.nvim",                    opts = {} },                            -- Optional: Improves `vim.ui.select`
       { 'echasnovski/mini.diff',                     version = '*' },
@@ -728,7 +770,7 @@ require("lazy").setup({
           return require("codecompanion.adapters").extend("copilot", {
             schema = {
               model = {
-                default = "claude-3.7-sonnet-thought"
+                default = "claude-sonnet-4"
               },
             }
           })
@@ -748,6 +790,24 @@ require("lazy").setup({
               },
             },
           },
+          tools = {
+            ["mcp"] = {
+              -- calling it in a function would prevent mcphub from being loaded before it's needed
+              callback = function() return require("mcphub.extensions.codecompanion") end,
+              description = "Call tools and resources from the MCP Servers",
+            }
+          },
+          -- keymaps = {
+          --   send = {
+          --     callback = function(chat)
+          --       vim.cmd("stopinsert")
+          --       chat:add_buf_message({ role = "llm", content = "" })
+          --       chat:submit()
+          --     end,
+          --     index = 1,
+          --     description = "Send",
+          --   },
+          -- }
         },
       },
       display = {
@@ -760,9 +820,6 @@ require("lazy").setup({
         },
       },
     },
-    init = function()
-      require("plugins.codecompanion.fidget-spinner"):init()
-    end,
   },
   {
     "echasnovski/mini.diff", -- Inline and better diff over the default
