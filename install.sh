@@ -19,7 +19,7 @@ brew install aws-cdk awscli brotli eza glab go heroku httpie htop jq mysql-clien
   node prettierd protobuf protoc-gen-go-grpc pscale ripgrep starship thefuck tree-sitter \
   wget yarn efm-langserver gh git lima zellij zoxide mise
 
-brew install --cask google-cloud-sdk hammerspoon
+brew install --cask google-cloud-sdk hammerspoon ghostty
 
 # Install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -47,6 +47,8 @@ ln -s `pwd`/warp $HOME/.warp
 ln -s `pwd`/hammerspoon $HOME/.hammerspoon
 ln -s `pwd`/config/alacritty $HOME/.config/alacritty
 ln -s `pwd`/config/zellij $HOME/.config/zellij
+ln -s `pwd`/config/ghostty $HOME/.config/ghostty
+ln -s `pwd`/tokyonight.nvim/extras/ghostty `pwd`/config/ghostty/themes
 
 sed -i '' "s/REPLACE_EMAIL/$GIT_EMAIL/g" gitconfig
 sed -i '' "s/REPLACE_NAME/$GIT_NAME/g" gitconfig

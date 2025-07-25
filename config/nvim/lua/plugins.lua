@@ -393,6 +393,23 @@ require("lazy").setup({
   },
 
   {
+    'nvim-flutter/flutter-tools.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
+    },
+    config = {
+      lsp = {
+        capabilities = {
+          textDocument = { formatting = { dynamicRegistration = false } },
+        },
+      }
+    }
+  },
+
+
+  {
     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = true
   },
@@ -436,6 +453,7 @@ require("lazy").setup({
           yaml = formatters.lsp,
           go = formatters.lsp,
           gomod = formatters.lsp,
+          dart = formatters.lsp,
           eruby = {
             formatters.if_file_exists({
               pattern = ".prettierrc",
@@ -469,7 +487,8 @@ require("lazy").setup({
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require("lualine").setup({
+      require('lualine').setup({
+
         sections = {
           lualine_x = { "overseer" },
           lualine_y = { "progress", { require('plugins.codecompanion.lualine') } },
@@ -754,40 +773,119 @@ require("lazy").setup({
     }
   },
   {
+    "ravitemer/mcphub.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
+    },
+    -- comment the following line to ensure hub will be ready at the earliest
+    cmd = "MCPHub",                          -- lazy load by default
+    build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+    -- uncomment this if you don't want mcp-hub to be available globally or can't use -g
+    -- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
+    config = {
+      auto_approve = true,
+      extensions = {
+        codecompanion = {
+          -- Show the mcp tool result in the chat buffer
+          show_result_in_chat = true,
+          -- Make chat #variables from MCP server resources
+          make_vars = true,
+        }
+      }
+    }
+  },
+
+  {
     "olimorris/codecompanion.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "hrsh7th/nvim-cmp",                                                                    -- Optional: For using slash commands and variables in the chat buffer
-      -- "j-hui/fidget.nvim",
       { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
       { "stevearc/dressing.nvim",                    opts = {} },                            -- Optional: Improves `vim.ui.select`
       { 'echasnovski/mini.diff',                     version = '*' },
-    },
-    config = {
-      adapters = {
-        copilot = function()
-          return require("codecompanion.adapters").extend("copilot", {
-            schema = {
-              model = {
-                default = "claude-sonnet-4"
-              },
-            }
-          })
-        end,
+      {
+        "Davidyz/VectorCode",
+        version = "*",                     -- optional, depending on whether you're on nightly or release
+        build = "pipx upgrade vectorcode", -- optional but recommended if you set `version = "*"`
+        dependencies = { "nvim-lua/plenary.nvim" },
+        cmd = "VectorCode"
       },
-      strategies = {
-        chat = {
-          slash_commands = {
-            ["file"] = {
-              opts = {
-                provider = "snacks",
+    },
+    cmd = { "CodeCompanion", "CodeCompanionToggle", "CodeCompanionChat", "CodeCompanionActions" },
+    keys = {
+      { "<leader>cc", "<cmd>CodeCompanionActions<cr>", desc = "Toggle Code Companion" },
+    },
+    opts = function()
+      return {
+        adapters = {
+          -- copilot = function()
+          --   return require("codecompanion.adapters").extend("copilot", {
+          --     schema = {
+          --       model = {
+          --         default = "gemini-2.5-pro"
+          --       },
+          --     }
+          --   })
+          -- end,
+          anthropic = function()
+            return require("codecompanion.adapters").extend("anthropic", {
+              env = {
+                api_key = "cmd:security find-generic-password -w -a Anthropic",
               },
+            })
+          end,
+        },
+        strategies = {
+          chat = {
+            adapter = "anthropic",
+            slash_commands = {
+              ["file"] = {
+                opts = {
+                  provider = "snacks",
+                },
+              },
+              ["buffer"] = {
+                opts = {
+                  provider = "snacks",
+                },
+              },
+              ["codebase"] = require("vectorcode.integrations").codecompanion.chat.make_slash_command(),
             },
-            ["buffer"] = {
-              opts = {
-                provider = "snacks",
+            tools = {
+              ["mcp"] = {
+                -- Prevent mcphub from loading before needed
+                callback = function()
+                  return require("mcphub.extensions.codecompanion")
+                end,
+                description = "Call tools and resources from the MCP Servers",
               },
+              ["vectorcode"] = {
+                description = "Run VectorCode to retrieve the project context.",
+                callback = function()
+                  return require("vectorcode.integrations").codecompanion.chat.make_tool()
+                end,
+              }
+            },
+            -- keymaps = {
+            --   send = {
+            --     callback = function(chat)
+            --       vim.cmd("stopinsert")
+            --       chat:add_buf_message({ role = "llm", content = "" })
+            --       chat:submit()
+            --     end,
+            --     index = 1,
+            --     description = "Send",
+            --   },
+            -- }
+          },
+        },
+        prompt_library = {
+          ['Generate a Commit Message'] = {
+            opts = {
+              adapter = {
+                name = "copilot"
+              }
             },
           },
           tools = {
@@ -809,17 +907,21 @@ require("lazy").setup({
           --   },
           -- }
         },
-      },
-      display = {
-        diff = {
-          enabled = true,
-          close_chat_at = 240,    -- Close an open chat buffer if the total columns of your display are less than...
-          layout = "vertical",    -- vertical|horizontal split for default provider
-          opts = { "internal", "filler", "closeoff", "algorithm:patience", "followwrap", "linematch:120" },
-          provider = "mini_diff", -- default|mini_diff
+        display = {
+          diff = {
+            enabled = true,
+            close_chat_at = 240,    -- Close an open chat buffer if the total columns of your display are less than...
+            layout = "vertical",    -- vertical|horizontal split for default provider
+            opts = { "internal", "filler", "closeoff", "algorithm:patience", "followwrap", "linematch:120" },
+            provider = "mini_diff", -- default|mini_diff
+          },
         },
-      },
-    },
+      }
+    end,
+
+    -- init = function()
+    --   require("plugins.codecompanion.spinner"):init()
+    -- end,
   },
   {
     "echasnovski/mini.diff", -- Inline and better diff over the default
