@@ -237,6 +237,13 @@ keybinds clear-defaults=true {
         bind "p" { GoToPreviousTab; SwitchToMode "normal"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
     }
+    normal {
+        bind "Super c" { Copy; }
+        bind "Super Alt Left" { GoToPreviousTab; }
+        bind "Super Alt Right" { GoToNextTab; }
+        bind "Super w" { CloseTab; }
+        bind "Super n" { NewTab; }
+    }
 }
 
 // Plugin aliases - can be used to change the implementation of Zellij
