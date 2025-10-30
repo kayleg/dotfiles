@@ -41,7 +41,7 @@
   "mkdir.nvim": { "branch": "main", "commit": "c55d1dee4f099528a1853b28bb28caa802eba217" },
   "neo-tree.nvim": { "branch": "v3.x", "commit": "8cdd6b1940f333c1dd085526a9c45b30fb2dbf50" },
   "neogit": { "branch": "master", "commit": "c6d00913f802acedfb93c01267e89185f25800ca" },
-  "neorg": { "branch": "main", "commit": "1dd99edd73c48196f7fa9ec763089fb774cf5499" },
+  "neorg": { "branch": "main", "commit": "59775af2fadb85cec6bff08a584c2c98a1694ea6" },
   "neorg-extras": { "branch": "main", "commit": "d0046d73099bbfee40045d18d5ce7a1265848630" },
   "neotest": { "branch": "master", "commit": "366175e1e74ff112787f9adbfb072eeaedd2a88e" },
   "neotest-jest": { "branch": "main", "commit": "5dc15386a2b04080fd24901eb2450aaf787bd172" },
@@ -83,5 +83,6 @@
   "vim-vsnip": { "branch": "master", "commit": "9bcfabea653abdcdac584283b5097c3f8760abaa" },
   "vim-wakatime": { "branch": "master", "commit": "d7973b157a632d1edeff01818f18d67e584eeaff" },
   "vimpeccable": { "branch": "master", "commit": "bd19b2a86a3d4a0ee184412aa3edb7ed57025d56" },
-  "vimtex": { "branch": "master", "commit": "be9deac3a23eeb145ccf11dd09080795838496ce" }
+  "vimtex": { "branch": "master", "commit": "be9deac3a23eeb145ccf11dd09080795838496ce" },
+  "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" }
 }

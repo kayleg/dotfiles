@@ -24,7 +24,7 @@ require("lazy").setup({
     lazy = false,
     priority = 1000,
     opts = {
-      transparent = true,
+      transparent = false,
       styles = {
         sidebars = "transparent",
         floats = "transparent",
@@ -105,13 +105,13 @@ require("lazy").setup({
       { "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
       { "<leader>sB",      function() Snacks.picker.grep_buffers() end,                            desc = "Grep Open Buffers" },
       { "<leader>sg",      function() Snacks.picker.grep() end,                                    desc = "Grep" },
-      { "<leader>sw",      function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+      { "<leader>fw",      function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
       -- search
       { '<leader>s"',      function() Snacks.picker.registers() end,                               desc = "Registers" },
       { '<leader>s/',      function() Snacks.picker.search_history() end,                          desc = "Search History" },
       { "<leader>sa",      function() Snacks.picker.autocmds() end,                                desc = "Autocmds" },
       { "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
-      { "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
+      -- { "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
       { "<leader>sC",      function() Snacks.picker.commands() end,                                desc = "Commands" },
       { "<leader>sd",      function() Snacks.picker.diagnostics() end,                             desc = "Diagnostics" },
       { "<leader>sD",      function() Snacks.picker.diagnostics_buffer() end,                      desc = "Buffer Diagnostics" },
@@ -199,7 +199,24 @@ require("lazy").setup({
         end,
       })
     end,
+  }, {
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
   },
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("which-key").show({ global = false })
+      end,
+      desc = "Buffer Local Keymaps (which-key)",
+    },
+  },
+},
 
 
   {
@@ -701,6 +718,26 @@ require("lazy").setup({
     event = "InsertEnter",
     config = true
   },
+
+  {
+    "ravitemer/mcphub.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    build = "npm install -g mcp-hub@latest",
+    config = {
+      auto_approve = true,
+      extensions = {
+        codecompanion = {
+          -- Show the mcp tool result in the chat buffer
+          -- NOTE:if the result is markdown with headers, content after the headers wont be sent by codecompanion
+          show_result_in_chat = true,
+          make_vars = true,           -- make chat #variables from MCP server resources
+          make_slash_commands = true, -- make /slash_commands from MCP server prompts
+        },
+      }
+    }
+  },
   {
     "ravitemer/mcphub.nvim",
     dependencies = {
@@ -817,6 +854,24 @@ require("lazy").setup({
               }
             },
           },
+          tools = {
+            ["mcp"] = {
+              -- calling it in a function would prevent mcphub from being loaded before it's needed
+              callback = function() return require("mcphub.extensions.codecompanion") end,
+              description = "Call tools and resources from the MCP Servers",
+            }
+          },
+          -- keymaps = {
+          --   send = {
+          --     callback = function(chat)
+          --       vim.cmd("stopinsert")
+          --       chat:add_buf_message({ role = "llm", content = "" })
+          --       chat:submit()
+          --     end,
+          --     index = 1,
+          --     description = "Send",
+          --   },
+          -- }
         },
         display = {
           diff = {
