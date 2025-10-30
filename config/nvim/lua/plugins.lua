@@ -201,9 +201,9 @@ require("lazy").setup({
     end,
   },
 
+
   {
     "mason-org/mason.nvim",
-    version = "1.*.*",
     opts = {
       automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
       ui = {
@@ -217,10 +217,7 @@ require("lazy").setup({
     dependencies = {
       {
         "mason-org/mason-lspconfig.nvim",
-        version = "1.*.*",
         config = function()
-          local lspconfig = require("lspconfig")
-          local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
           local on_attach = function(client, bufnr)
             -- Enable completion triggered by <c-x><c-o>
             vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -258,79 +255,48 @@ require("lazy").setup({
           }
 
           local vim = vim
-          require("mason-lspconfig").setup_handlers({
-            -- The first entry (without a key) will be the default handler
-            -- and will be called for each installed server that doesn't have
-            -- a dedicated handler.
-            function(server_name) -- default handler (optional)
-              lspconfig[server_name].setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
-              })
-            end,
-            -- Next, you can provide a dedicated handler for specific servers.
-            -- For example, a handler override for the `rust_analyzer`:
-            ["theme_check"] = function()
-              lspconfig.theme_check.setup({
-                on_attach = on_attach,
-                capabilities = capabilities,
-                root_dir = function()
-                  return vim.loop.cwd()
-                end,
-              })
-            end,
-
-            ['cssls'] = function()
-              local custom_capabilities = require("cmp_nvim_lsp").default_capabilities()
-              custom_capabilities.textDocument.completion.completionItem.snippetSupport = true
-              lspconfig.cssls.setup({
-                on_attach = on_attach,
-                capabilities = custom_capabilities,
-                settings = {
-                  css = {
-                    validate = true,
-                    lint = {
-                      unknownAtRules = 'ignore'
-                    },
-                  },
-                  less = {
-                    validate = true,
-                    lint = {
-                      unknownAtRules = 'ignore'
-                    },
-                  },
-                  scss = {
-                    validate = true,
-                    lint = {
-                      unknownAtRules = 'ignore'
-                    },
-                  }
-                }
-              })
-            end
-
-
-
-            -- ["ruby_ls"] = function()
-            -- 	lspconfig.ruby_ls.setup({
-            -- 		cmd = { "bundle", "exec", "ruby-lsp" },
-            -- 		on_attach = on_attach,
-            -- 		capabilities = capabilities,
-            -- 		enabledfeatures = {
-            -- 			"codeactions",
-            -- 			"diagnostics",
-            -- 			"documenthighlights",
-            -- 			"documentsymbols",
-            -- 			"formatting",
-            -- 			"inlayhint",
-            -- 			"foldingRanges",
-            -- 			"selectionRanges",
-            -- 			"semanticHighlighting",
-            -- 			"hover",
-            -- 		},
-            -- 	})
-            -- end,
+          vim.lsp.config("*", {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            handlers = handlers,
           })
+
+          vim.lsp.config("theme_check", {
+            on_attach = on_attach,
+            capabilities = capabilities,
+            root_dir = function()
+              return vim.loop.cwd()
+            end,
+          })
+
+          local custom_capabilities = require("cmp_nvim_lsp").default_capabilities()
+          custom_capabilities.textDocument.completion.completionItem.snippetSupport = true
+          vim.lsp.config("cssls",{
+            on_attach = on_attach,
+            capabilities = custom_capabilities,
+            settings = {
+              css = {
+                validate = true,
+                lint = {
+                  unknownAtRules = 'ignore'
+                },
+              },
+              less = {
+                validate = true,
+                lint = {
+                  unknownAtRules = 'ignore'
+                },
+              },
+              scss = {
+                validate = true,
+                lint = {
+                  unknownAtRules = 'ignore'
+                },
+              }
+            }
+          })
+          require("mason").setup()
+          require("mason-lspconfig").setup()
         end,
         opts = {
           ensure_installed = { "lua_ls" },
